@@ -1,3 +1,4 @@
+import 'package:anime_verse/screens/detail_screen.dart';
 import 'package:anime_verse/screens/favorite_screen.dart';
 import 'package:anime_verse/screens/home_screen.dart';
 import 'package:anime_verse/screens/profile_screen.dart';
@@ -6,7 +7,6 @@ import 'package:anime_verse/screens/signup_screen.dart';
 import 'package:anime_verse/widgets/bottom_navigation_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../screens/detail_screen.dart';
 
 class AppRoutes {
   static const String signIn = '/sign-in';
