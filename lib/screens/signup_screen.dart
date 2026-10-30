@@ -1,4 +1,5 @@
 import 'package:anime_verse/providers/auth_notifier.dart';
+import 'package:anime_verse/utils/snackbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -31,16 +32,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email dan password wajib diisi')),
-      );
+      SnackBarHelper.show(context, 'Email dan password wajib diisi');
       return;
     }
 
     if (password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password minimal 6 karakter')),
-      );
+      SnackBarHelper.show(context, 'Password minimal 6 karakter');
       return;
     }
 
@@ -52,9 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (success) {
       context.go(AppRoutes.home);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(auth.errorMessage ?? 'Sign up gagal')),
-      );
+      SnackBarHelper.show(context, auth.errorMessage ?? 'Sign up gagal');
     }
   }
 
@@ -67,8 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (success) {
       context.go(AppRoutes.home);
     } else if (auth.errorMessage != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(auth.errorMessage!)));
+      SnackBarHelper.show(context, auth.errorMessage!);
     }
   }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "540423743422",
+    "project_id": "pemmob-lab",
+    "storage_bucket": "pemmob-lab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540423743422:android:5243b4ff9b172bb041bbef",
+        "android_client_info": {
+          "package_name": "com.example.anime_verse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl2EppzvM6IvcleXzL9xctQUCIV9AMfHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

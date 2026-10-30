@@ -1,4 +1,5 @@
 import 'package:anime_verse/providers/auth_notifier.dart';
+import 'package:anime_verse/utils/snackbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -31,9 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email dan password wajib diisi')),
-      );
+      SnackBarHelper.show(context, 'Email dan password wajib diisi');
       return;
     }
 
@@ -45,9 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (success) {
       context.go(AppRoutes.home);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(auth.errorMessage ?? 'Sign in gagal')),
-      );
+      SnackBarHelper.show(context, auth.errorMessage ?? 'Sign in gagal');
     }
   }
 
@@ -60,8 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (success) {
       context.go(AppRoutes.home);
     } else if (auth.errorMessage != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(auth.errorMessage!)));
+      SnackBarHelper.show(context, auth.errorMessage!);
     }
   }
 
@@ -102,15 +98,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          success
-              ? 'Link reset password dikirim ke $email'
-              : (auth.errorMessage ?? 'Gagal mengirim link reset password'),
-        ),
-      ),
-    );
+    if (success) {
+      SnackBarHelper.show(
+        context,
+        'Link reset password dikirim ke $email',
+        isError: false,
+      );
+    } else {
+      SnackBarHelper.show(
+        context,
+        auth.errorMessage ?? 'Gagal mengirim link reset password',
+      );
+    }
   }
 
   @override
