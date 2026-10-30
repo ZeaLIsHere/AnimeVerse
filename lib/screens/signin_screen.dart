@@ -51,6 +51,68 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    final auth = context.read<AuthNotifier>();
+    final success = await auth.signInWithGoogle();
+
+    if (!mounted) return;
+
+    if (success) {
+      context.go(AppRoutes.home);
+    } else if (auth.errorMessage != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(auth.errorMessage!)));
+    }
+  }
+
+  Future<void> _handleForgotPassword() async {
+    final resetController = TextEditingController(
+      text: _emailController.text.trim(),
+    );
+    final email = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Reset Password'),
+        content: TextField(
+          controller: resetController,
+          decoration: const InputDecoration(
+            labelText: 'Email',
+            hintText: 'Masukkan email terdaftar',
+          ),
+          keyboardType: TextInputType.emailAddress,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, resetController.text.trim()),
+            child: const Text('Kirim'),
+          ),
+        ],
+      ),
+    );
+
+    if (email == null || email.isEmpty) return;
+    if (!mounted) return;
+
+    final auth = context.read<AuthNotifier>();
+    final success = await auth.sendPasswordResetEmail(email);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success
+              ? 'Link reset password dikirim ke $email'
+              : (auth.errorMessage ?? 'Gagal mengirim link reset password'),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -184,6 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
+                        onPressed: isLoading ? null : _handleForgotPassword,
                         child: Text(
                           'Forgot Password?',
                           style: TextStyle(
@@ -191,7 +254,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             color: Colors.blue.shade300,
                           ),
                         ),
-                        onPressed: () {},
                       ),
                     ),
 
@@ -271,7 +333,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: isLoading ? null : _handleGoogleSignIn,
                         icon: SvgPicture.asset(
                           'assets/images/google_icon.svg',
                           height: baseWidth * 0.06,

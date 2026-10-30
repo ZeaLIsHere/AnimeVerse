@@ -1,3 +1,4 @@
+import 'package:anime_verse/screens/auth_gate.dart';
 import 'package:anime_verse/screens/detail_screen.dart';
 import 'package:anime_verse/screens/favorite_screen.dart';
 import 'package:anime_verse/screens/home_screen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoutes {
+  static const String authGate = '/';
   static const String signIn = '/sign-in';
   static const String signUp = '/sign-up';
   static const String home = '/home';
@@ -19,12 +21,17 @@ class AppRoutes {
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-GoRouter createRouter(){
+GoRouter createRouter() {
   // routes.dart
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.signIn,
+    initialLocation: AppRoutes.authGate,
     routes: [
+      GoRoute(
+        path: AppRoutes.authGate,
+        name: 'auth-gate',
+        builder: (context, state) => const AuthGate(),
+      ),
       // 1. Auth Routes
       GoRoute(
         path: AppRoutes.signIn,

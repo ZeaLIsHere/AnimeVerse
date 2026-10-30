@@ -1,6 +1,7 @@
-
+import 'package:anime_verse/providers/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../config/routes.dart';
 import '../widgets/app_scaffold.dart';
@@ -77,7 +78,8 @@ class ProfileScreen extends StatelessWidget {
 
                   // Email
                   Text(
-                    'iklcanimeverse@gmail.com',
+                    context.watch<AuthNotifier>().user?.email ??
+                        'iklcanimeverse@gmail.com',
                     style: TextStyle(
                       fontSize: screenWidth * 0.038,
                       color: Colors.white70,
@@ -180,14 +182,13 @@ class ProfileScreen extends StatelessWidget {
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // Static dummy function
-                  context.go(AppRoutes.signIn);
+                onPressed: () async {
+                  await context.read<AuthNotifier>().signOut();
+                  if (context.mounted) {
+                    context.go(AppRoutes.signIn);
+                  }
                 },
-                icon: Icon(
-                  Icons.logout,
-                  size: screenWidth * 0.05,
-                ),
+                icon: Icon(Icons.logout, size: screenWidth * 0.05),
                 label: Text(
                   'Logout',
                   style: TextStyle(
@@ -196,11 +197,11 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD34343), // Menyesuaikan warna merah pada gambar
+                  backgroundColor: const Color(
+                    0xFFD34343,
+                  ), // Menyesuaikan warna merah pada gambar
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.018,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.018),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(screenWidth * 0.04),
                   ),

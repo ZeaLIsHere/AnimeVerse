@@ -83,6 +83,64 @@ class AuthNotifier extends ChangeNotifier {
     }
   }
 
+  Future<bool> signInWithGoogle() async {
+    if (Firebase.apps.isEmpty) {
+      _errorMessage = 'Firebase belum siap. Tambahkan google-services.json.';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _user = await _authServices.signInWithGoogle();
+      _isLoading = false;
+      notifyListeners();
+      return _user != null;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = e.message ?? 'Google Sign-In gagal';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> sendPasswordResetEmail(String email) async {
+    if (Firebase.apps.isEmpty) {
+      _errorMessage = 'Firebase belum siap. Tambahkan google-services.json.';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _authServices.sendPasswordResetEmail(email);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = e.message ?? 'Gagal mengirim email reset password';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> signOut() async {
     _isLoading = true;
     notifyListeners();

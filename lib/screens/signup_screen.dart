@@ -58,6 +58,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    final auth = context.read<AuthNotifier>();
+    final success = await auth.signInWithGoogle();
+
+    if (!mounted) return;
+
+    if (success) {
+      context.go(AppRoutes.home);
+    } else if (auth.errorMessage != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(auth.errorMessage!)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -261,7 +275,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       width: double.infinity,
                       height: 52,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: isLoading ? null : _handleGoogleSignIn,
                         icon: SvgPicture.asset(
                           'assets/images/google_icon.svg',
                           height: baseWidth * 0.06,
